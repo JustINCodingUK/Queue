@@ -1,19 +1,19 @@
 package io.github.justincodinguk.core.data.di
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.justincodinguk.core.data.pager_source.PostsPagingSource
-import io.github.justincodinguk.core.network.QueueNetworkDataSource
+import io.github.justincodinguk.core.data.repository.NetworkPostsRepository
+import io.github.justincodinguk.core.data.repository.PostsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface DataModule {
+abstract class DataModule {
 
-    @Provides
-    fun providePagingSource(
-        postsPagingSource: QueueNetworkDataSource
-    ) = PostsPagingSource(postsPagingSource)
+    @Binds
+    internal abstract fun bindNetworkPostsRepository(
+        impl: NetworkPostsRepository
+    ) : PostsRepository
 
 }

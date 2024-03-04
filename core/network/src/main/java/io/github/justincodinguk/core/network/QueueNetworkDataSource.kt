@@ -14,4 +14,6 @@ interface QueueNetworkDataSource {
 
     suspend fun getCommentsOnQuestionById(id: Int): List<Comment>
 
+    suspend fun searchQuestion(searchPhrase: String, tags: List<String>): List<Question>
+
 }

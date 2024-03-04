@@ -1,33 +1,44 @@
 package io.github.justincodinguk.core.network.retrofit
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import io.github.justincodinguk.core.ext.toPlainText
 import io.github.justincodinguk.core.model.Answer
 import io.github.justincodinguk.core.model.Comment
+import io.github.justincodinguk.core.model.Question
 import io.github.justincodinguk.core.network.QueueNetworkDataSource
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType
-import retrofit2.Retrofit
 import javax.inject.Inject
 
-internal class StackExchangeNetworkDataSource @Inject constructor()
-    : QueueNetworkDataSource {
-
-    private val stackExchangePostsApiService = Retrofit.Builder()
-        .baseUrl("https://api.stackexchange.com/2.3/")
-        .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
-        .build()
-        .create(StackExchangePostsApiService::class.java)
-
+internal class StackExchangeNetworkDataSource @Inject constructor(
+    private val stackExchangePostsApiService: StackExchangePostsApiService
+) : QueueNetworkDataSource {
     override suspend fun getQuestionsByActivity(pageNum: Int)
-        = stackExchangePostsApiService.getQuestions(pageNum).items
+        = stackExchangePostsApiService.getQuestions(pageNum).items.map {
+            it.copy(title = it.title.toPlainText())
+    }
 
-    override suspend fun getQuestionById(id: Int)
-        = stackExchangePostsApiService.getQuestionById(id).items.single()
+    override suspend fun getQuestionById(id: Int): Question {
+        val question = stackExchangePostsApiService.getQuestionById(id).items.single()
+        return question.copy(
+            title = question.title.toPlainText(),
+            body = question.body.toPlainText()
+        )
+    }
 
     override suspend fun getAnswersForQuestionById(id: Int): List<Answer>
-        = stackExchangePostsApiService.getAnswersForQuestionById(id).items
+        = stackExchangePostsApiService.getAnswersForQuestionById(id).items.map {
+            it.copy(body = it.body.toPlainText())
+    }
 
     override suspend fun getCommentsOnQuestionById(id: Int): List<Comment>
-        = stackExchangePostsApiService.getCommentsOnQuestionById(id).items
+        = stackExchangePostsApiService.getCommentsOnQuestionById(id).items.map {
+            it.copy(body = it.body.toPlainText())
+    }
 
+    override suspend fun searchQuestion(searchPhrase: String, tags: List<String>): List<Question> {
+        val tagsJoined = tags.joinToString(";")
+        val response =  stackExchangePostsApiService.searchQuestion(searchPhrase, tagsJoined)
+        response.items.last().hasMore = response.hasMore
+        return response.items.map {
+            it.copy(title = it.title.toPlainText())
+        }
+    }
 }
