@@ -8,10 +8,10 @@ import java.util.Date
 
 @Serializable
 data class Comment @OptIn(ExperimentalSerializationApi::class) constructor(
-    val user: User,
-    val edited: Boolean,
-    val score: Int,
-    val body: String,
+    val user: User = User.emptyUser(),
+    val edited: Boolean = false,
+    val score: Int = 0,
+    val body: String = "",
 
     @Serializable(DateSerializer::class)
     @JsonNames("creation_date")

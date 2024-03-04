@@ -8,14 +8,14 @@ import java.util.Date
 
 @Serializable
 data class Answer @OptIn(ExperimentalSerializationApi::class) constructor(
-    val owner: User,
-    val score: Int,
-    val body: String,
+    val owner: User = User.emptyUser(),
+    val score: Int = 0,
+    val body: String = "",
 
-    @JsonNames("is_accepted") val isAccepted: Boolean,
-    @JsonNames("answer_id") val answerId: Int,
-    @JsonNames("question_id") val questionId: Int,
-    @JsonNames("content_license") val contentLicense: String,
+    @JsonNames("is_accepted") val isAccepted: Boolean = false,
+    @JsonNames("answer_id") val answerId: Int = -1,
+    @JsonNames("question_id") val questionId: Int = -1,
+    @JsonNames("content_license") val contentLicense: String = "",
 
     @Serializable(DateSerializer::class)
     @JsonNames("last_activity_date")
@@ -27,5 +27,5 @@ data class Answer @OptIn(ExperimentalSerializationApi::class) constructor(
 
     @Serializable(DateSerializer::class)
     @JsonNames("last_edit_date")
-    val lastEditDate: Date?
+    val lastEditDate: Date? = null
 )
