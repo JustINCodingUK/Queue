@@ -6,12 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import io.github.justincodinguk.core.ext.toSimpleDateString
+import io.github.justincodinguk.core.ext.truncatedToString
 import io.github.justincodinguk.core.ui.IconText
 import io.github.justincodinguk.core.ui.R
 import java.util.Date
 
 @Composable
-fun QuestionInfo(
+fun PostInfo(
     modifier: Modifier = Modifier,
     views: Int,
     lastActivityDate: Date,
@@ -23,11 +24,13 @@ fun QuestionInfo(
         horizontalArrangement = Arrangement.SpaceAround
     ) {
 
-        IconText(
-            iconPainter = painterResource(id = R.drawable.ic_views),
-            text = views.toString(),
-            contentDescription = "Views"
-        )
+        if(views!=-1) {
+            IconText(
+                iconPainter = painterResource(id = R.drawable.ic_views),
+                text = views.truncatedToString(),
+                contentDescription = "Views"
+            )
+        }
 
         IconText(
             iconPainter = painterResource(id = R.drawable.ic_create),

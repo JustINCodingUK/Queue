@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import io.github.justincodinguk.core.ext.timeDiffString
+import io.github.justincodinguk.core.ext.truncatedToString
 import io.github.justincodinguk.core.model.Question
 import io.github.justincodinguk.core.model.User
 import io.github.justincodinguk.core.model.UserType
@@ -111,7 +112,7 @@ fun QuestionCard(
 
                 IconText(
                     iconPainter = painterResource(R.drawable.ic_views),
-                    text = question.viewCount.toString(),
+                    text = question.viewCount.truncatedToString(),
                     contentDescription = null
                 )
 
