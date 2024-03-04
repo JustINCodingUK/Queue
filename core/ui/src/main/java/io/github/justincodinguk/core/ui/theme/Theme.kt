@@ -1,4 +1,4 @@
-package io.github.justincodinguk.soqueue.ui.theme
+package io.github.justincodinguk.core.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -79,13 +79,14 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun QueueApplicationTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    isDebug: Boolean = false,
+    content: @Composable () -> Unit
 ) {
     val isDynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
     val colors = when {
-        isDynamicColorAvailable && useDarkTheme -> dynamicDarkColorScheme(LocalContext.current)
-        isDynamicColorAvailable && !useDarkTheme -> dynamicLightColorScheme(LocalContext.current)
+        isDynamicColorAvailable && useDarkTheme && !isDebug -> dynamicDarkColorScheme(LocalContext.current)
+        isDynamicColorAvailable && !useDarkTheme && !isDebug -> dynamicLightColorScheme(LocalContext.current)
         useDarkTheme -> DarkColors
         else -> LightColors
     }
